@@ -1,4 +1,4 @@
-package com.ileossa.project;
+package com.ileossa.project.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,15 +25,19 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         httpSecurity.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/about").permitAll()
+                    .antMatchers("/", "/about", "/registration").permitAll()
                     .antMatchers("/admin/**").hasAnyRole("ADMIN")
                     .antMatchers("/user/**").hasAnyRole("USER")
                     .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                    .formLogin()
                     .loginPage("/login").permitAll()
                 .and()
                 .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+                    .deleteCookies("auth_code", "JSESSIONID")
+                    .invalidateHttpSession(true)
                     .permitAll()
                 .and()
                 .exceptionHandling()
