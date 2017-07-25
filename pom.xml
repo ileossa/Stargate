@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ileossa.project</groupId>
-	<artifactId>projact</artifactId>
+	<artifactId>project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>projact</name>
+	<name>project</name>
 	<description>Standart initialize project</description>
 
 	<parent>
@@ -99,6 +99,15 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!-- Lombok, generate setter+getter+builder for POJO-->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok-maven -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-maven</artifactId>
+			<version>1.16.18.0</version>
+			<type>pom</type>
+		</dependency>
+
 	</dependencies>
 
 	<build>
