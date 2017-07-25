@@ -1,4 +1,4 @@
-package com.ileossa.project;
+package com.ileossa.project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +39,13 @@ public class DefaultController {
         return "/login";
     }
 
+    @GetMapping("/logout")
+    public String logout(){
+        return "/logout";
+    }
+
+
+    // ERROR CONTROLLER
     @GetMapping("/403")
     public String error403() {
         return "/error/403";
@@ -52,5 +59,10 @@ public class DefaultController {
     @GetMapping("/503")
     public String error503(){
         return "/error/503";
+    }
+
+    @GetMapping("/418")
+    public String error418(){
+        return "/error/418";
     }
 }
