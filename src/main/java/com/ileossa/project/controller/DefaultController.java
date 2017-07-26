@@ -44,6 +44,11 @@ public class DefaultController {
         return "/logout";
     }
 
+    @GetMapping("/language")
+    public String language(){
+        return "/language";
+    }
+
 
     // ERROR CONTROLLER
     @GetMapping("/403")

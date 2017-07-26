@@ -61,6 +61,11 @@ public class UserService {
 
 
     private UserDao importToDAO( UserDto userDto){
+        // FIXME je dois pas laisser comme ca
+        RoleDao roleDao = new RoleDao("USER", null);
+        Set<RoleDao> role = new HashSet<>();
+        role.add(roleDao);
+
         UserDao userDao = userRepository.findUserDaoByEmailEquals(userDto.getEmail());
         if(userDao == null){
             userDao = new UserDao();
