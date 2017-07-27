@@ -1,0 +1,110 @@
+spring:
+  profiles:
+    active: ${PROFILE}
+
+---
+#---------------------------------------------------
+#            GLOBAL CONFIGURATION
+#---------------------------------------------------
+
+info:
+  name: Projet Annuel
+app:
+  description: ${info.name} est une application pour l'ESGI, groupe[Alvin, Maxime, Vincent]
+spring:
+  application:
+    name: Hotel
+application:
+  version: 1.0
+server:
+  port: 8080
+  contextPath: /
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        hibernate: DEBUG
+
+
+
+# JPA  - USE this to generate table
+spring.jpa.generate-ddl: true
+
+---
+#---------------------------------------------------
+#            DEVELOPER  MODE
+#---------------------------------------------------
+spring:
+  profiles: dev
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  jmx:
+    enabled: true
+# H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
+  h2:
+    console:
+      enabled: true
+      path: /h2
+# Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+# Mailing (download fakeSMTP, and run with java -jar fakeSMTP.jar )
+mail:
+  protocol: smtp
+  smtp:
+    host: localhost
+    port: 2505
+  support:
+    username: test
+    password: test
+
+
+
+
+---
+#---------------------------------------------------
+#            TEST  MODE
+#---------------------------------------------------
+spring:
+  profiles: test
+  jpa:
+    show-sql: true
+  jmx:
+    enabled: true
+server:
+  port: 8080
+
+# H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
+  h2:
+    console:
+      enabled: true
+      path: /h2
+# Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+# Use GrrenMail (cf: http://www.icegreen.com/greenmail/)
+mail:
+  protocol: smtp
+  smtp:
+    host: localhost
+    port: 9999
+  support:
+    username: test
+    password: test
+  template.path.logo: src\main\resources\static\img\logoRHM.png
+  template:
+    url:
+      home: http://residencedeshautsdemenaye.com/
+      unsubscribe: http://residencedeshautsdemenaye.com/api/mail/unsubscribe/

@@ -1,6 +1,6 @@
 package com.ileossa.project.dao;
 
-import com.ileossa.project.dto.UserDto;
+import com.ileossa.project.dao.staticValues.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,7 +18,7 @@ public class RoleDao {
     private Long id;
 
     @NotNull
-    private String name;
+    private Role role;
 
     @ManyToMany(mappedBy = "userRoles")
     private Set<UserDao> userDaos;
@@ -26,8 +26,8 @@ public class RoleDao {
     public RoleDao() {
     }
 
-    public RoleDao(String name, Set<UserDao> userDaos) {
-        this.name = name;
+    public RoleDao(Role role, Set<UserDao> userDaos) {
+        this.role = role;
         this.userDaos = userDaos;
     }
 
@@ -39,12 +39,12 @@ public class RoleDao {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Role getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Set<UserDao> getUserDaos() {

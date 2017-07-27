@@ -2,13 +2,17 @@ package com.ileossa.project.service;
 
 import com.ileossa.project.dao.RoleDao;
 import com.ileossa.project.dao.UserDao;
+import com.ileossa.project.dao.staticValues.Role;
 import com.ileossa.project.dto.UserDto;
 import com.ileossa.project.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+
 
 /**
  * Created by ileossa on 25/07/2017.
@@ -16,6 +20,7 @@ import java.util.Set;
 @Service
 public class UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserRepository userRepository;
 
@@ -62,6 +67,13 @@ public class UserService {
 
     private UserDao importToDAO( UserDto userDto){
         UserDao userDao = userRepository.findUserDaoByEmailEquals(userDto.getEmail());
+
+        // FIXME je dois pas laisser comme ca
+        Set<UserDao> userList = new HashSet<>();
+        RoleDao roleDao = new RoleDao(Role.GHOST, userList);
+        Set<RoleDao> role = new HashSet<>();
+        role.add(roleDao);
+
         if(userDao == null){
             userDao = new UserDao();
         }

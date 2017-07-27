@@ -15,12 +15,12 @@ import javax.validation.Valid;
  * Created by ileossa on 24/07/2017.
  */
 @Controller
-public class WebController extends WebMvcConfigurerAdapter{
+public class ConnectionController extends WebMvcConfigurerAdapter{
 
     private final UserService userService;
 
     @Autowired
-    public WebController(UserService userService) {
+    public ConnectionController(UserService userService) {
         this.userService = userService;
     }
 
