@@ -1,0 +1,108 @@
+spring:
+  profiles:
+    active: ${PROFILE}
+
+---
+#---------------------------------------------------
+#            GLOBAL CONFIGURATION
+#---------------------------------------------------
+
+info:
+  name: Projet Annuel
+app:
+  description: ${info.name} Coonerie
+spring:
+  application:
+    name: Licorne
+application:
+  version: 1.0
+server:
+  port: 8080
+  contextPath: /
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        hibernate: DEBUG
+
+
+
+# JPA  - USE this to generate table
+spring.jpa.generate-ddl: true
+
+---
+#---------------------------------------------------
+#            DEVELOPER  MODE
+#---------------------------------------------------
+spring:
+  profiles: dev
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  jmx:
+    enabled: true
+# H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
+  h2:
+    console:
+      enabled: true
+      path: /h2
+# Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+# Mailing (download fakeSMTP, and run with java -jar fakeSMTP.jar )
+mail:
+  protocol: smtp
+  smtp:
+    host: localhost
+    port: 2505
+  support:
+    username: test
+    password: test
+
+
+
+
+---
+#---------------------------------------------------
+#            TEST  MODE
+#---------------------------------------------------
+spring:
+  profiles: test
+  jpa:
+    show-sql: true
+  jmx:
+    enabled: true
+# Use GrrenMail (cf: http://www.icegreen.com/greenmail/)
+  mail:
+      host: smtp.gmail.com
+      port: 587
+      username: EMAIL ADDRESSE
+      password: PASSWORD
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls.enable: true
+server:
+  port: 8080
+
+# H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
+  h2:
+    console:
+      enabled: true
+      path: /h2
+# Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+
