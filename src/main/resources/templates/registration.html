@@ -1,36 +1,91 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Security Example </title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
 <body>
-<form action="#" th:action="@{/registration}" th:object="${userDto}" method="post">
-    <table>
-        <tr>
-            <td>Name:</td>
-            <td><input type="text" th:field="*{name}" /></td>
-            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
-        </tr>
-        <tr>
-            <td>Age:</td>
-            <td><input type="text" th:field="*{age}" /></td>
-            <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
-        </tr>
-        <tr>
-            <td>email:</td>
-            <td><input type="email" th:field="*{email}" /></td>
-            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
-        </tr>
-        <tr>
-            <td>password:</td>
-            <td><input type="password" th:field="*{password}" /></td>
-            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
-        </tr>
-        <tr>
-            <td>verified password:</td>
-            <td><input type="password" th:field="*{verified_password}" /></td>
-            <td th:if="${#fields.hasErrors('verified_password')}" th:errors="*{verified_password}">Password Error</td>
-        </tr>
-        <tr>
-            <td><button type="submit">Submit</button></td>
-        </tr>
-    </table>
-</form>
+
+<div th:replace="fragments/header :: header"/>
+
+
+
+    <form action="#" th:action="@{/registration}" th:object="${registrationDto}" method="post">
+        <table>
+            <tr>
+                <td>email:</td>
+                <td><input type="email" th:field="*{email}" /></td>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
+            </tr>
+            <tr>
+                <td>password:</td>
+                <td><input type="password" th:field="*{password}" /></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+            </tr>
+            <tr>
+                <td>verified password:</td>
+                <td><input type="password" th:field="*{matchedPassword}" /></td>
+                <td th:if="${#fields.hasErrors('matchedPassword')}" th:errors="*{matchedPassword}">Password Error</td>
+            </tr>
+            <tr>
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </table>
+    </form>
+
+
+    <div class="container">
+
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form action="#" th:action="@{/registration}" th:object="${registrationDto}" method="post">
+                    <fieldset>
+                        <h1>Please Sign Un</h1>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('matchedPassword')}" th:errors="*{matchedPassword}">Password Error</div>
+
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger">
+                                Invalid parameters
+                            </div>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <div class="alert alert-info">
+                                You have been logged out.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg"
+                                   placeholder="Email" required="true" autofocus="true"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg"
+                                   placeholder="Password" required="true"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" name="matchedPassword" id="matchedPassword" class="form-control input-lg"
+                                   placeholder="matchedPassword" required="true"/>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Ok"/>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div th:replace="fragments/footer :: footer"/>
+
 </body>
 </html>
