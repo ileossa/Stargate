@@ -55,18 +55,17 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-
 # Mailing (download fakeSMTP, and run with java -jar fakeSMTP.jar )
-mail:
-  protocol: smtp
-  smtp:
-    host: localhost
-    port: 2505
-  support:
-    username: test
-    password: test
-
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: EMAIL ADDRESSE
+    password: PASSWORD
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
 
 
 ---
