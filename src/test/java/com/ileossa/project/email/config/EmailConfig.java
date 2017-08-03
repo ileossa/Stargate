@@ -1,4 +1,4 @@
-package com.ileossa.project.config;
+package com.ileossa.project.email.config;
 
 import com.ileossa.project.mail.EmailService;
 import com.ileossa.project.mail.impl.EmailServiceImpl;
@@ -21,7 +21,7 @@ import java.util.Properties;
 @ImportResource(value = "classpath:/Tests/spring/appXMLContext.xml")
 @PropertySource(value = "classpath:/application.yml")
 @ActiveProfiles("test")
-public class AppConfig {
+public class EmailConfig {
 
     // You don't need this config, only if you want specific properties for test
 //    @Bean
@@ -44,7 +44,6 @@ public class AppConfig {
 //        return emailSender;
 //    }
 
-
     @Bean
     public JavaMailSenderImpl javaMailSender(){
         return new JavaMailSenderImpl();
@@ -54,7 +53,7 @@ public class AppConfig {
     private JavaMailSenderImpl javaMailSender;
 
     @Bean
-    public EmailService emailService(){
+    public EmailServiceImpl emailService(){
         return new EmailServiceImpl(javaMailSender);
     }
 

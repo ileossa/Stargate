@@ -1,9 +1,9 @@
-package com.ileossa.project;
+package com.ileossa.project.email;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import com.ileossa.project.config.AppConfig;
+import com.ileossa.project.email.config.EmailConfig;
 import com.ileossa.project.mail.EmailService;
 import com.ileossa.project.mail.impl.EmailServiceImpl;
 import org.junit.After;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by ileossa on 02/08/2017.
  */
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration(classes = EmailConfig.class)
 @SpringBootTest
 @Import(EmailServiceImpl.class)
 @RunWith(SpringRunner.class)
@@ -36,7 +36,7 @@ public class EmailTest {
     @Resource
     private JavaMailSenderImpl emailSender;
     @Autowired
-    private EmailService emailService;
+    private EmailServiceImpl emailService;
 
 
     private GreenMail testSmtp;
