@@ -1,11 +1,13 @@
 package com.ileossa.project.controller;
 
-import com.ileossa.project.dto.UserDto;
-import com.ileossa.project.service.UserService;
+import com.ileossa.project.dto.RegistrationDto;
+import com.ileossa.project.exception.UserNotExist;
+import com.ileossa.project.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -15,13 +17,13 @@ import javax.validation.Valid;
  * Created by ileossa on 24/07/2017.
  */
 @Controller
-public class WebController extends WebMvcConfigurerAdapter{
+public class RegistrationController extends WebMvcConfigurerAdapter{
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public WebController(UserService userService) {
-        this.userService = userService;
+    public RegistrationController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Override
@@ -30,19 +32,22 @@ public class WebController extends WebMvcConfigurerAdapter{
     }
 
     @GetMapping("/registration")
-    public String showForm(UserDto userDto) {
+    public String showForm(RegistrationDto registrationDto) {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String checkPersonInfo(@Valid UserDto userDto, BindingResult bindingResult) {
+    public String checkPersonInfo(@Valid RegistrationDto registrationDto, BindingResult bindingResult) {
 
         // check if Moodel received is conform
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        userService.newUser(userDto);
-
+        try {
+            userServiceImpl.save(registrationDto);
+        } catch (UserNotExist userNotExist) {
+            // nothing, default user doesn't exist
+        }
         return "redirect:/results";
     }
 }
