@@ -29,30 +29,23 @@ public class UserDao {
     private String password;
 
     @NotNull
-    @Min(18)
-    private Integer age;
+    private Roles role;
 
-    @NotNull
-    @Size(min=2, max=30)
-    private String name;
-
-    @NotNull
-    @ManyToMany
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID") )
-    private Set<RoleDao> userRoles;
+    private Boolean actif;
 
 
     public UserDao() {
+        super();
+        this.role = Roles.ANONYMOUS;
+        this.actif = false;
     }
 
-    public UserDao(String email, String password, Integer age, String name, Set<RoleDao> userRoles) {
+    public UserDao(String email, String password) {
+        super();
         this.email = email;
         this.password = password;
-        this.age = age;
-        this.name = name;
-        this.userRoles = userRoles;
+        this.role = Roles.ANONYMOUS;
+        this.actif = false;
     }
 
     public long getId() {
@@ -79,27 +72,19 @@ public class UserDao {
         this.password = password;
     }
 
-    public Integer getAge() {
-        return age;
+    public Roles getRole() {
+        return role;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
-    public String getName() {
-        return name;
+    public Boolean getActif() {
+        return actif;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<RoleDao> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<RoleDao> userRoles) {
-        this.userRoles = userRoles;
+    public void setActif(Boolean actif) {
+        this.actif = actif;
     }
 }
