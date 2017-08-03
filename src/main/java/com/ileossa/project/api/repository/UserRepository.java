@@ -1,6 +1,6 @@
-package com.ileossa.project.repository;
+package com.ileossa.project.api.repository;
 
-import com.ileossa.project.dao.UserDao;
+import com.ileossa.project.api.dao.UserDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

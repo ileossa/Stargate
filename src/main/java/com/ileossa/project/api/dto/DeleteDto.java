@@ -1,4 +1,4 @@
-package com.ileossa.project.dto;
+package com.ileossa.project.api.dto;
 
 import javax.validation.constraints.NotNull;
 

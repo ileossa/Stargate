@@ -1,7 +1,7 @@
-package com.ileossa.project.service;
+package com.ileossa.project.api.service;
 
-import com.ileossa.project.dao.UserDao;
-import com.ileossa.project.dto.*;
+import com.ileossa.project.api.dao.UserDao;
+import com.ileossa.project.api.dto.*;
 import com.ileossa.project.exception.UserNotExist;
 
 /**

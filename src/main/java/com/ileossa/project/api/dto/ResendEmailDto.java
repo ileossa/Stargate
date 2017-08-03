@@ -1,17 +1,14 @@
-package com.ileossa.project.dto;
+package com.ileossa.project.api.dto;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * Created by ileossa on 01/08/2017.
  */
-public class LoginDto {
+public class ResendEmailDto {
 
     @NotNull
     private String email;
-
-    @NotNull
-    private String password;
 
     public String getEmail() {
         return email;
@@ -19,13 +16,5 @@ public class LoginDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

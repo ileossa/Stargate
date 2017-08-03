@@ -1,4 +1,4 @@
-package com.ileossa.project;
+package com.ileossa.project.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.ileossa.project.controller;
+package com.ileossa.project.api.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

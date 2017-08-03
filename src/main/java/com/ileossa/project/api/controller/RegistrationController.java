@@ -1,8 +1,8 @@
-package com.ileossa.project.controller;
+package com.ileossa.project.api.controller;
 
-import com.ileossa.project.dto.RegistrationDto;
+import com.ileossa.project.api.dto.RegistrationDto;
 import com.ileossa.project.exception.UserNotExist;
-import com.ileossa.project.service.UserServiceImpl;
+import com.ileossa.project.api.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

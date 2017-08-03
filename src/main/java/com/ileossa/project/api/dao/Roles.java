@@ -1,4 +1,4 @@
-package com.ileossa.project.dao;
+package com.ileossa.project.api.dao;
 
 /**
  * Created by ileossa on 01/08/2017.

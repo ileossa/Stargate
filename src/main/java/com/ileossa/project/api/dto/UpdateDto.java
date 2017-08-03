@@ -1,4 +1,4 @@
-package com.ileossa.project.dto;
+package com.ileossa.project.api.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 /**
  * Created by ileossa on 01/08/2017.
  */
-public class RegistrationDto {
+public class UpdateDto {
 
     @NotNull
     private String email;
