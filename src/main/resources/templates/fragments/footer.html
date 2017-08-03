@@ -6,7 +6,7 @@
 <body>
 <div th:fragment="footer">
 
-    <div class="container">
+    <div class="footer">
 
         <footer>
             <!-- this is footer -->
@@ -16,9 +16,13 @@
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
 
-            <script type="text/javascript"
-                    src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" th:src="@{/js/tinybox.js}"></script>
+            <script type="text/javascript">
+                function openJS(){alert('loaded')}
+                function closeJS(){alert('closed')}
+            </script>
         </footer>
     </div>
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Gellerie</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+    <div th:replace="fragments/header :: header"/>
+
+    <h2>Responsive Image Gallery</h2>
+    <h4>Resize the browser window to see the effect.</h4>
+
+    <div class="responsive">
+        <div class="gallery">
+            <div class="containerLink">
+                <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
+                <a class="topright" onclick="TINY.box.show({url:'/echo/caca', post:'http:toto.com',width:300,height:150})">🔗</a>
+            </div>
+            <div class="desc">
+            Add a description of the image here
+            </div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
+            <div class="desc">Add a description of the image here</div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
+            <div class="desc">Add a description of the image here</div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
+            <div class="desc">Add a description of the image here</div>
+        </div>
+    </div>
+
+</body>
+
+<div th:replace="fragments/footer :: footer"/>
+</html>
