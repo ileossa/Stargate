@@ -2,9 +2,11 @@ package com.ileossa.project.mail.impl;
 
 import com.ileossa.project.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(msg);
     }
 
-    public void sendSimpleMessageWithAttachment( String to, String subject, String text, String pathFile) throws MessagingException {
+    public void sendSimpleMessageWithAttachment( String to, String subject, String text, String attchement) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         // second param TRUE, it s for activate the multipart option
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -42,15 +44,11 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject(subject);
         helper.setText(text);
 
-        FileSystemResource file = new FileSystemResource(new File(pathFile));
+        FileSystemResource file = new FileSystemResource(new File(attchement));
         helper.addAttachment("fileAttchement.jpg", file);
 
         emailSender.send(message);
     }
-
-
-
-
 }
 
 
