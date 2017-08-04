@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ileossa.project</groupId>
-	<artifactId>project</artifactId>
+	<artifactId>Stargate</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -164,8 +164,8 @@
 					</resources>
 					<!-- use  ~/.docker/config.json , you need run befor maven "docker login" -->
 					<useConfigFile>true</useConfigFile>
-					<!-- Push image on repo when project build -->
-					<!-- <pushImage>true</pushImage> -->
+					<!-- Push image on repo when project build replace by maven command -DpushImage=true-->
+					 <!--<pushImage>true</pushImage>-->
 					<!-- Overwrite tag at maven build -->
 					<forceTags>true</forceTags>
 					<imageTags>

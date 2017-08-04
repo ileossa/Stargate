@@ -13,7 +13,8 @@ before_install:
   - docker login -e=$DOCKER_EMAIL -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - echo "docker hub credential are working"
   #- docker build -t latest src/main/docker/
-  - mvn package docker:build -DpushImage=true
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V package docker:build -DpushImage=true
+
 
 script:
   - docker images
