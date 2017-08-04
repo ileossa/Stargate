@@ -1,10 +1,13 @@
 package com.ileossa.project.shorter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.security.Timestamp;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by ileossa on 03/08/2017.
@@ -20,10 +23,16 @@ public class UrlShorterDao {
     private String originalUrl;
 
     @NotNull
+    @Column(unique = true)
     private String shortUrl;
 
     @NotNull
     private long timeOfValidity;
+
+//    private Map<String, Date> historic;
+
+
+
 
     public UrlShorterDao() {
     }
