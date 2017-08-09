@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
-@EnableScheduling
+//@EnableScheduling
 public class ProjectApplication {
 
 	public static void main(String[] args) {
