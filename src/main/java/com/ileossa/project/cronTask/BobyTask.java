@@ -39,11 +39,11 @@ public class BobyTask {
     }
 
 
-    @Scheduled(cron = "")
+    @Scheduled(fixedRate = 5000000)
     public void cleanExpiredShortUrl(){
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         // 1728000 == 20 days
         long instantPlus20Days = timestamp.toInstant().getEpochSecond();
-        urlShorterRepository.findByTimeOfValidityOrderByTimeOfValidityAsc()
+        urlShorterRepository.findByTimeOfValidityOrderByTimeOfValidityAsc(instantPlus20Days);
     }
 }
