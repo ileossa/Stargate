@@ -11,7 +11,7 @@ public class DefaultController {
 
     @GetMapping("/")
     public String home1() {
-        return "/home";
+        return "/index";
     }
 
     @GetMapping("/home")
@@ -52,6 +52,11 @@ public class DefaultController {
     @GetMapping("/pannelAdmin")
     public String pannelAdmin(){
         return "/pannelAdmin";
+    }
+
+    @GetMapping("/simpleAdmin")
+    public String simpleAdmin(){
+        return "/simpleAdmin";
     }
 
     @PostMapping("/echo/{string}")
