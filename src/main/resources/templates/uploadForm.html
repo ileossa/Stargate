@@ -1,6 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+	<div th:replace="fragments/hearderAdmin :: hearderAdmin"/>
+	<div th:replace="fragments/menuAdmin :: menuAdmin"/>
+
 	<div th:if="${message}">
 		<h2 th:text="${message}"/>
 	</div>
@@ -22,6 +25,8 @@
 			</li>
 		</ul>
 	</div>
+
+	<div th:replace="fragments/footerAdmin :: footerAdmin"/>
 
 </body>
 </html>
