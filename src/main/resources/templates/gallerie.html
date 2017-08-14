@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Gellerie</title>
+    <title>Gallerie</title>
     <div th:replace="fragments/header :: header-css"/>
 </head>
 <body>
 
     <div th:replace="fragments/header :: header"/>
 
+
+
     <h2>Responsive Image Gallery</h2>
     <h4>Resize the browser window to see the effect.</h4>
 
-    <div class="responsive">
+    <div>
+        <form method="POST" enctype="multipart/form-data">
+            <table>
+                <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+                <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="responsive" th:each="file : ${files}">
         <div class="gallery">
             <div class="containerLink">
-                <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
+                <img id="imgOver" th:src="${file}" th:alt="${file}" width="600" height="400"  th:onclick="'TINY.box.show({image:\''+${file}+'\', animate:true, boxid:\'frameless\'});'" />
                 <a class="topright" onclick="TINY.box.show({url:'/echo/caca', post:'http:toto.com',width:300,height:150})">🔗</a>
             </div>
             <div class="desc">
-            Add a description of the image here
+                <a th:href="${file}" th:text="${file}" />
             </div>
         </div>
     </div>
@@ -30,21 +41,109 @@
         </div>
     </div>
 
-    <div class="responsive">
-        <div class="gallery">
-            <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
-            <div class="desc">Add a description of the image here</div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <img id="imgOver" src="http://lorempicsum.com/futurama/255/200/2" alt="Mountains" width="600" height="400" onclick="TINY.box.show({image:'https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-518891.jpg', animate:true, boxid:'frameless'})" />
-            <div class="desc">Add a description of the image here</div>
-        </div>
-    </div>
 
 </body>
 
-<div th:replace="fragments/footer :: footer"/>
+<footer>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/tinybox.js}"></script>
+    <script type="text/javascript">
+        function openJS(){alert('loaded')}
+        function closeJS(){alert('closed')}
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $('#test').scrollToFixed();
+            $('.res-nav_click').click(function(){
+                $('.main-nav').slideToggle();
+                return false
+
+            });
+
+        });
+    </script>
+
+    <script  type="text/javascript">
+        wow = new WOW(
+            {
+                animateClass: 'animated',
+                offset:       100
+            }
+        );
+        wow.init();
+    </script>
+
+
+    <script type="text/javascript">
+        $(window).load(function(){
+
+            $('.main-nav li a, .servicelink').bind('click',function(event){
+                var $anchor = $(this);
+
+                $('html, body').stop().animate({
+                    scrollTop: $($anchor.attr('href')).offset().top - 102
+                }, 1500,'easeInOutExpo');
+
+                //if you don't want to use the easing effects:
+                $('html, body').stop().animate({
+                    scrollTop: $($anchor.attr('href')).offset().top
+                }, 1000);
+
+                if( 768 > $(window).width() ){
+                    $('.main-nav').hide();
+                }
+                event.preventDefault();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(window).load(function(){
+
+
+            var $container = $('.portfolioContainer'),
+                $body = $('body'),
+                colW = 375,
+                columns = null;
+
+
+            $container.isotope({
+                // disable window resizing
+                resizable: true,
+                masonry: {
+                    columnWidth: colW
+                }
+            });
+
+            $(window).smartresize(function(){
+                // check if columns has changed
+                var currentColumns = Math.floor( ( $body.width() -30 ) / colW );
+                if ( currentColumns !== columns ) {
+                    // set new column count
+                    columns = currentColumns;
+                    // apply width to container manually, then trigger relayout
+                    $container.width( columns * colW )
+                        .isotope('reLayout');
+                }
+
+            }).smartresize(); // trigger resize to set container width
+            $('.portfolioFilter a').click(function(){
+                $('.portfolioFilter .current').removeClass('current');
+                $(this).addClass('current');
+
+                var selector = $(this).attr('data-filter');
+                $container.isotope({
+
+                    filter: selector,
+                });
+                return false;
+            });
+
+        });
+
+    </script>
+</footer>
 </html>

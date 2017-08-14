@@ -39,10 +39,10 @@ public class DefaultController {
         return "/logout";
     }
 
-    @GetMapping("/gallerie")
-    public String gallerie(){
-        return "/gallerie";
-    }
+//    @GetMapping("/gallerie")
+//    public String gallerie(){
+//        return "/gallerie";
+//    }
 
     @GetMapping("/index")
     public String index(){

@@ -20,25 +20,25 @@
             <h3>General</h3>
             <ul class="nav side-menu">
                 <li>
-                    <a><i class="fa fa-home"></i> Home </a>
-                    <button type="button" class="btn btn-success btn-lg"><a><i class="fa fa-upload"></i> Importer </a></button>
-                    <a><i class="fa fa-home"></i> Gallerie </a>
-                    <a><i class="fa fa-home"></i> Home </a>
-                    <a><i class="fa fa-home"></i> Home </a>
+                    <a><button type="button" class="btn btn-success btn-lg"><i class="fa fa-upload"/> Upload </button></a>
+                    <a> Gallerie </a>
+                    <a> Gestion compte </a>
                 </li>
             </ul>
         </div>
-        <div sec:authorize="hasRole('ROLE_ADMIN')" class="menu_section">
+        <div class="menu_section">
+        <!--<div sec:authorize="hasRole('ROLE_ADMIN')" class="menu_section">-->
             <h3>Administration</h3>
             <ul class="nav side-menu">
                 <li>
-                    <a>
-                        <i class="fa fa-bug"></i><span> Additional Pages</span>
-                    </a>
+                    <a><i class="fa fa-bug"></i><span> Metric</span></a>
+                    <a><i class="fa fa-bug"></i><span> Emails</span></a>
+                    <a><i class="fa fa-bug"></i><span> Liens</span></a>
+                    <a><i class="fa fa-bug"></i><span> Utilisateurs</span></a>
+                    <a><i class="fa fa-bug"></i><span> Fichiers</span></a>
                 </li>
             </ul>
         </div>
-
     </div>
     <!-- /sidebar menu -->
 
