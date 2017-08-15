@@ -1,5 +1,7 @@
 package com.ileossa.project.api.controller;
 
+import com.ileossa.project.api.service.GallerieService;
+import com.ileossa.project.uploadFiles.service.FileService;
 import com.ileossa.project.uploadFiles.storage.StorageFileNotFoundException;
 import com.ileossa.project.uploadFiles.storage.StorageService;
 import org.slf4j.Logger;
@@ -12,38 +14,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/gallerie")
-public class GalerieController {
+public class GallerieController {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final StorageService storageService;
+    private final FileService fileService;
+    private final GallerieService gallerieService;
 
     @Autowired
-    public GalerieController(StorageService storageService) {
+    public GallerieController(StorageService storageService, FileService fileService, GallerieService gallerieService) {
         this.storageService = storageService;
+        this.fileService = fileService;
+        this.gallerieService = gallerieService;
     }
 
     @RequestMapping(value ="", method = GET)
     public String listUploadedFiles(Model model) throws IOException {
-
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(GalerieController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
-
+        model.addAttribute("files", gallerieService.listAll());
         return "gallerie";
     }
+
 
     @RequestMapping(value = "/files/{filename:.+}", method = GET)
     @ResponseBody

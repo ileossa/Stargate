@@ -3,13 +3,14 @@ package com.ileossa.project.uploadFiles.service;
 import com.ileossa.project.classifier.LabelImage;
 import com.ileossa.project.uploadFiles.dao.File;
 import com.ileossa.project.uploadFiles.repository.FileRepository;
-import com.ileossa.project.uploadFiles.storage.StorageProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * Created by ileossa on 15/08/2017.
@@ -70,6 +71,23 @@ public class FileServiceImpl implements FileService {
         args[1] = classpth;
         String res = labelImage.startUp(args);
         return res;
+    }
+
+    @Override
+    public String getTag(String name) {
+        File file = fileRepository.findFileByName(name);
+        return  file.getTag();
+    }
+
+    @Override
+    public List<File> findAll() {
+        return fileRepository.findAll();
+    }
+
+    @Override
+    public File findFile(String originalURL) {
+        String filename = originalURL.substring(originalURL.lastIndexOf('/')+1);
+        return fileRepository.findFileByName(filename);
     }
 
 
