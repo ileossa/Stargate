@@ -15,6 +15,8 @@
  */
 package com.ileossa.project.filesUpload.storage;
 
+import com.ileossa.project.uploadFiles.service.FileService;
+import com.ileossa.project.uploadFiles.service.FileServiceImpl;
 import com.ileossa.project.uploadFiles.storage.FileSystemStorageService;
 import com.ileossa.project.uploadFiles.storage.StorageException;
 import com.ileossa.project.uploadFiles.storage.StorageProperties;
@@ -35,11 +37,12 @@ public class FileSystemStorageServiceTests {
 
     private StorageProperties properties = new StorageProperties();
     private FileSystemStorageService service;
+    private FileServiceImpl fileService;
 
     @Before
     public void init() {
         properties.setLocation("target/files/" + Math.abs(new Random().nextLong()));
-        service = new FileSystemStorageService(properties);
+        service = new FileSystemStorageService(properties, fileService);
         service.init();
     }
 
