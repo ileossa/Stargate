@@ -1,7 +1,8 @@
 package com.ileossa.project.shorter;
 
 import com.ileossa.project.exception.UrlShortException;
-import org.springframework.stereotype.Component;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Created by ileossa on 03/08/2017.
@@ -18,6 +19,8 @@ public interface UrlShorterService {
     public UrlShorterDao getPojo(String url) throws UrlShortException;
 
     public String generateShortUrl(String originalUrl);
+
+    public BufferedImage watermark(String url);
 
 
 }

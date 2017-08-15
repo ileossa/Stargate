@@ -1,11 +1,21 @@
 package com.ileossa.project.shorter;
 
 import com.ileossa.project.exception.UrlShortException;
+import com.ileossa.project.uploadFiles.service.FileService;
+import com.ileossa.project.uploadFiles.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
@@ -14,14 +24,19 @@ import java.util.Random;
  */
 @Component
 public class UrlShorterServiceImpl implements UrlShorterService {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private UrlShorterRepository urlShorterRepository;
+    private static UrlShorterRepository urlShorterRepository;
+    private static StorageService storageService;
+    private static FileService fileService;
+    @Value("${watermark.text}")
+    private String textWatermark;
 
     @Autowired
-    public UrlShorterServiceImpl(UrlShorterRepository urlShorterRepository) {
+    public UrlShorterServiceImpl(UrlShorterRepository urlShorterRepository, FileService fileService, StorageService storageService) {
         this.urlShorterRepository = urlShorterRepository;
+        this.fileService = fileService;
+        this.storageService = storageService;
     }
 
 
@@ -91,6 +106,38 @@ public class UrlShorterServiceImpl implements UrlShorterService {
             return randUrl;
         }
         return generateShortUrl(originalUrl);
+    }
+
+    @Override
+    public BufferedImage watermark(String originalURL) {
+        com.ileossa.project.uploadFiles.dao.File imageSave = fileService.findFile(originalURL);
+        File sourceImageFile = new File(imageSave.getClasspath());
+        try {
+            BufferedImage sourceImage = ImageIO.read(sourceImageFile);
+            Graphics2D g2d = (Graphics2D) sourceImage.getGraphics();
+
+            // initializes necessary graphic properties
+            AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
+            g2d.setComposite(alphaChannel);
+            g2d.setColor(Color.BLUE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 90));
+            FontMetrics fontMetrics = g2d.getFontMetrics();
+            Rectangle2D rect = fontMetrics.getStringBounds(textWatermark, g2d);
+
+            // calculates the coordinate where the String is painted
+            int centerX = (sourceImage.getWidth() - (int) rect.getWidth()) / 2;
+            int centerY = sourceImage.getHeight() / 2;
+
+            // paints the textual watermark
+            g2d.drawString(textWatermark, centerX, centerY);
+
+            g2d.dispose();
+            return sourceImage;
+
+        } catch (IOException e) {
+            logger.error("Error process watermark on image %s %s", sourceImageFile.getPath(), String.valueOf(e));
+        }
+        return null;
     }
 
 

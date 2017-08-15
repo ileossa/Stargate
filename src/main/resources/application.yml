@@ -32,7 +32,7 @@ logging:
         hibernate: DEBUG
 
 clasifier.modelPB: C:\\Users\\ileossa\\Desktop\\inception5h
-
+watermark.text: BABAR service
 
 # JPA  - USE this to generate table
 spring.jpa.generate-ddl: true
@@ -46,7 +46,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
   jmx:
     enabled: true
 # H2 (acces with localhost:port/h2 or localhost:port/h2-console/)

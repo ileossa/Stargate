@@ -9,7 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -24,7 +29,7 @@ import java.text.SimpleDateFormat;
 public class UrlShorterController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private UrlShorterServiceImpl urlShorterService;
+    private UrlShorterService urlShorterService;
     private PrismService prismService;
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -66,9 +71,14 @@ public class UrlShorterController {
 
 
     @GetMapping("/share/{shortUrl}")
-    public String redirectOriginalUrl(@PathVariable String shortUrl, HttpServletRequest request ){
+    public String redirectOriginalUrl(@PathVariable String shortUrl, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String urlOriginal = urlShorterService.getOriginalUrl(shortUrl);
         prismService.logAccess(request);
+        BufferedImage res = urlShorterService.watermark(urlOriginal);
+        ServletOutputStream strem = response.getOutputStream();
+        ImageIO.write(res, "jpg", strem);
+        strem.flush();
+        strem.close();
         return "redirect:" + urlOriginal;
     }
 }
