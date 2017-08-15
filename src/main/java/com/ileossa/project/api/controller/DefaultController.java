@@ -62,7 +62,7 @@ public class DefaultController {
     @PostMapping("/echo/{string}")
     @ResponseBody
     public String echo(@PathVariable String string, @RequestBody String id){
-        return id;
+        return string;
     }
 
 }

@@ -25,26 +25,32 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
 
-        httpSecurity.csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/**").permitAll()
-//                    .antMatchers("/", "/registration", "/error/**").permitAll()
-//                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
-//                    .antMatchers("/user/**").hasAnyRole("USER")
-//                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-                    .loginPage("/login").permitAll()
-                .and()
-                .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                    .deleteCookies("auth_code", "JSESSIONID")
-                    .invalidateHttpSession(true)
-                    .permitAll()
-                .and()
-                .exceptionHandling()
-                    .accessDeniedHandler(accessDeniedHandler);
+//        httpSecurity.csrf().disable()
+//                .authorizeRequests()
+//                    .antMatchers("/**").permitAll()
+////                    .antMatchers("/", "/registration", "/error/**").permitAll()
+////                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
+////                    .antMatchers("/user/**").hasAnyRole("USER")
+////                    .anyRequest().authenticated()
+//                .and()
+//                    .formLogin()
+//                    .loginPage("/login").permitAll()
+//                .and()
+//                .logout()
+//                    .logoutUrl("/logout")
+//                    .logoutSuccessUrl("/")
+//                    .deleteCookies("auth_code", "JSESSIONID")
+//                    .invalidateHttpSession(true)
+//                    .permitAll()
+//                .and()
+//                .exceptionHandling()
+//                    .accessDeniedHandler(accessDeniedHandler);
+
+        httpSecurity.authorizeRequests().antMatchers("/").permitAll().and()
+                .authorizeRequests().antMatchers("/console/**").permitAll();
+
+        httpSecurity.csrf().disable();
+        httpSecurity.headers().frameOptions().disable();
 
     }
 
