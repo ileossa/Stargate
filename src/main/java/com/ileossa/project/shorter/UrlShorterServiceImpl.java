@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Random;
 @Component
 public class UrlShorterServiceImpl implements UrlShorterService {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private UrlShorterRepository urlShorterRepository;
 
@@ -26,7 +27,7 @@ public class UrlShorterServiceImpl implements UrlShorterService {
 
     @Override
     public UrlShorterDao save(UrlShorterDao urlShorterDao) throws UrlShortException {
-        if(isExist(urlShorterDao.getOriginalUrl())){
+        if(isExist(urlShorterDao.getShortUrl())){
             throw new UrlShortException("l'url exist already in database, please convert an another String");
         }
         return urlShorterRepository.save(urlShorterDao);
@@ -59,7 +60,12 @@ public class UrlShorterServiceImpl implements UrlShorterService {
     @Override
     public String getOriginalUrl(String shortUrl) {
         UrlShorterDao object = urlShorterRepository.findByShortUrlEquals(shortUrl);
-        return object.getOriginalUrl();
+        try {
+            return java.net.URLDecoder.decode(object.getOriginalUrl(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Cannot decode URI: " + object.getOriginalUrl());
+        }
+        return object.getShortUrl();
     }
 
     @Override
@@ -99,7 +105,7 @@ public class UrlShorterServiceImpl implements UrlShorterService {
             salt.append(SALTCHARS.charAt(index));
         }
         String saltStr = salt.toString();
-        LOG.debug("random String generate: {}", saltStr);
+        logger.debug("random String generate: {}", saltStr);
         return saltStr;
     }
 }

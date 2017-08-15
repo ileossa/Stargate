@@ -26,7 +26,7 @@
         <div class="gallery">
             <div class="containerLink">
                 <img id="imgOver" th:src="${file}" th:alt="${file}" width="600" height="400"  th:onclick="'TINY.box.show({image:\''+${file}+'\', animate:true, boxid:\'frameless\'});'" />
-                <a class="topright" onclick="TINY.box.show({url:'/echo/caca', post:'http:toto.com',width:300,height:150})">🔗</a>
+                <a class="topright" th:onclick="'TINY.box.show({url:\'/share\', post:\''+${file}+'\',width:300,height:150});'">🔗</a>
             </div>
             <div class="desc">
                 <a th:href="${file}" th:text="${file}" />
