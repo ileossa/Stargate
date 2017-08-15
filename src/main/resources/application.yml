@@ -31,6 +31,7 @@ logging:
         web: DEBUG
         hibernate: DEBUG
 
+clasifier.modelPB: C:\\Users\\ileossa\\Desktop\\inception5h
 
 
 # JPA  - USE this to generate table
