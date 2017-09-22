@@ -1,53 +1,143 @@
 package com.ileossa.project.api.controller;
 
-import com.ileossa.project.api.dto.RegistrationDto;
+import com.ileossa.project.api.dao.UserAccount;
+import com.ileossa.project.api.service.UserService;
 import com.ileossa.project.exception.UserNotExist;
-import com.ileossa.project.api.service.UserServiceImpl;
+import com.ileossa.project.mail.EmailMethodes;
+import com.nulabinc.zxcvbn.Strength;
+import com.nulabinc.zxcvbn.Zxcvbn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by ileossa on 24/07/2017.
  */
 @Controller
-public class RegistrationController extends WebMvcConfigurerAdapter{
+public class RegistrationController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserService userService;
+    private EmailMethodes emailMethodes;
 
     @Autowired
-    public RegistrationController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public RegistrationController(BCryptPasswordEncoder bCryptPasswordEncoder,
+                                  UserService userService, @Qualifier("emailMetodes") EmailMethodes emailMethodes) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userService = userService;
+        this.emailMethodes = emailMethodes;
     }
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/results").setViewName("results");
+    // Return registration form template
+    @RequestMapping(value="/register", method = RequestMethod.GET)
+    public ModelAndView showRegistrationPage(ModelAndView modelAndView, UserAccount user){
+        modelAndView.addObject("user", user);
+        modelAndView.setViewName("register");
+        return modelAndView;
     }
 
-    @GetMapping("/registration")
-    public String showForm(RegistrationDto registrationDto) {
-        return "registration";
-    }
+    // Process form input data
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid UserAccount user, BindingResult bindingResult, HttpServletRequest request) throws UserNotExist {
 
-    @PostMapping("/registration")
-    public String checkPersonInfo(@Valid RegistrationDto registrationDto, BindingResult bindingResult) {
+        modelAndView.addObject("user", new UserAccount("", "","","",null, false, ""));
 
-        // check if Moodel received is conform
-        if (bindingResult.hasErrors()) {
-            return "registration";
+        // Lookup user in database by e-mail
+        UserAccount userExists = userService.findByEmail(user.getEmail());
+
+        log.trace(String.valueOf(userExists));
+
+        if (userExists != null) {
+            modelAndView.addObject("errorMessage", "Oops!  There is already a user registered with the email provided.");
+            bindingResult.reject("email");
         }
-        try {
-            userServiceImpl.save(registrationDto);
-        } catch (UserNotExist userNotExist) {
-            // nothing, default user doesn't exist
+
+        if (bindingResult.hasErrors())
+        {
         }
-        return "redirect:/results";
+        else { // new user so we create user and send confirmation e-mail
+
+            // Disable user until they click on confirmation link in email
+            user.setEnabled(false);
+
+            // Generate random 36-character string token for confirmation link
+            user.setConfirmationToken(UUID.randomUUID().toString());
+
+            userService.saveUser(user);
+
+            emailMethodes.sendTokenRegistrationNewUser(user, request);
+
+            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
+        }
+        // move user to login form view
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    // Process confirmation link
+    @RequestMapping(value="/confirm", method = RequestMethod.GET)
+    public ModelAndView confirmRegistration(ModelAndView modelAndView, @RequestParam("token") String token) {
+
+        UserAccount user = userService.findByConfirmationToken(token);
+
+        if (user == null) { // No token found in DB
+            modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
+        } else { // Token found
+            modelAndView.addObject("confirmationToken", user.getConfirmationToken());
+        }
+
+        modelAndView.setViewName("confirm");
+        return modelAndView;
+    }
+
+    // Process confirmation link
+    @RequestMapping(value="/confirm", method = RequestMethod.POST)
+    public ModelAndView confirmRegistration(ModelAndView modelAndView, BindingResult bindingResult, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) throws UserNotExist {
+
+        modelAndView.setViewName("confirm");
+
+        Zxcvbn passwordCheck = new Zxcvbn();
+
+        Strength strength = passwordCheck.measure(requestParams.get("password"));
+
+        if (strength.getScore() < 3) {
+            //modelAndView.addObject("errorMessage", "Your password is too weak.  Choose a stronger one.");
+            bindingResult.reject("password");
+
+            redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
+
+            modelAndView.setViewName("redirect:confirm?token=" + requestParams.get("token"));
+            log.trace(requestParams.get("token"));
+            return modelAndView;
+        }
+
+        // Find the user associated with the reset token
+        UserAccount user = userService.findByConfirmationToken(requestParams.get("token"));
+
+        // Set new password
+        user.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
+
+        // Set user to enabled
+        user.setEnabled(true);
+
+        // Save user
+        userService.saveUser(user);
+
+        modelAndView.addObject("successMessage", "Your password has been set! You can close this windows.");
+        return modelAndView;
     }
 }
