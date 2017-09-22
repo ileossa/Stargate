@@ -7,6 +7,7 @@ spring:
 #            GLOBAL CONFIGURATION
 #---------------------------------------------------
 
+
 info:
   name: Projet Annuel
 app:
@@ -28,14 +29,15 @@ logging:
   level:
     org:
       springframework:
-        web: DEBUG
-        hibernate: DEBUG
+        web: error
+        hibernate: error
 
 clasifier.modelPB: C:\\Users\\ileossa\\Desktop\\inception5h
 watermark.text: BABAR service
 
 # JPA  - USE this to generate table
 spring.jpa.generate-ddl: true
+
 
 ---
 #---------------------------------------------------
@@ -46,20 +48,18 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+    generate-ddl: true
   jmx:
     enabled: true
-# H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
-  h2:
-    console:
-      enabled: true
-      path: /h2
-# Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
   datasource:
-    url: jdbc:h2:file:~/test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/projact
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      max-wait: 10000
+      max-active: 10
 # Mailing (download fakeSMTP, and run with java -jar fakeSMTP.jar )
   mail:
     host: smtp.gmail.com
@@ -71,6 +71,9 @@ spring:
         smtp:
           auth: true
           starttls.enable: true
+  thymeleaf:
+    cache: false
+    mode: HTML5
 
 
 ---
