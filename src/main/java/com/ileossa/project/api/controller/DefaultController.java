@@ -60,4 +60,7 @@ public class DefaultController {
         return string;
     }
 
+
+    @GetMapping("/uploadForm")
+    public String uploadForm(){return "/uploadForm";}
 }

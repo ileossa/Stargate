@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserAccount saveUser(UserAccount userAccount){
-        userAccount.setRoles(new HashSet<Role>((Collection<? extends Role>) userRolesRepository.findAll()));
+        userAccount.setRoles(new HashSet<Role>((Set<? extends Role>) userRolesRepository.findByName("ROLE_USER")));
         UserAccount user = userRepository.save(userAccount);
         return user;
     }

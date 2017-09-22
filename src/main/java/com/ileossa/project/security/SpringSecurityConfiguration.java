@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Created by ileossa on 24/07/2017.
@@ -44,18 +45,19 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .csrf()
                 .and()
                 .authorizeRequests()
-//                    .antMatchers("/**").permitAll()
-                    .antMatchers("/", "/register", "/confirm", "/reset", "/resources/**" ,"/error/**").permitAll()
+//                    .antMatchers("/**").permitAll();
+                    .antMatchers("/", "index", "/register", "/confirm", "/reset", "/resources/**" ,"/error/**").permitAll()
                     .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                     .antMatchers("/user/**").hasAnyRole("Role_USER")
                     .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login").permitAll()
+                    .formLogin().defaultSuccessUrl("/index.html", true)
+                    .loginPage("/login").failureUrl("/login?error").permitAll()
                 .and()
                 .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/login")
                     .deleteCookies("auth_code", "JSESSIONID")
                     .invalidateHttpSession(true)
                     .permitAll()
@@ -63,10 +65,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .exceptionHandling()
                     .accessDeniedHandler(accessDeniedHandler);
 
-//        httpSecurity.authorizeRequests().antMatchers("/").permitAll().and()
-//                .authorizeRequests().antMatchers("/console/**").permitAll();
+        httpSecurity.authorizeRequests().antMatchers("/").permitAll().and()
+                .authorizeRequests().antMatchers("/console/**").permitAll();
 
-//        httpSecurity.headers().frameOptions().disable();
+        httpSecurity.headers().frameOptions().disable();
 
     }
 

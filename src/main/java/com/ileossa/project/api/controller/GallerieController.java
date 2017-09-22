@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-@RequestMapping("/gallerie")
+@RequestMapping()
 public class GallerieController {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +39,7 @@ public class GallerieController {
         this.gallerieService = gallerieService;
     }
 
-    @RequestMapping(value ="", method = GET)
+    @RequestMapping(value ="/gallerie", method = GET)
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("files", gallerieService.listAll());
         return "gallerie";
@@ -54,15 +55,16 @@ public class GallerieController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @RequestMapping(value = "", method = POST)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/gallerie", method = POST)
+    public ModelAndView handleFileUpload(ModelAndView modelAndView, @RequestParam("file") MultipartFile file,
+                                         RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 
-        return "redirect:/gallerie";
+        modelAndView.setViewName("gallerie");
+        return modelAndView;
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)

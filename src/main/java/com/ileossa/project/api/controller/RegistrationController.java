@@ -110,34 +110,44 @@ public class RegistrationController {
 
         modelAndView.setViewName("confirm");
 
-        Zxcvbn passwordCheck = new Zxcvbn();
+        if( requestParams.get("password").equals(requestParams.get("ConfirmPassword"))){
+            Zxcvbn passwordCheck = new Zxcvbn();
 
-        Strength strength = passwordCheck.measure(requestParams.get("password"));
+            Strength strength = passwordCheck.measure(requestParams.get("password"));
 
-        if (strength.getScore() < 3) {
-            //modelAndView.addObject("errorMessage", "Your password is too weak.  Choose a stronger one.");
+            if (strength.getScore() < 3) {
+                //modelAndView.addObject("errorMessage", "Your password is too weak.  Choose a stronger one.");
+                bindingResult.reject("password");
+
+                redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
+
+                modelAndView.setViewName("redirect:confirm?token=" + requestParams.get("token"));
+                log.trace(requestParams.get("token"));
+                return modelAndView;
+            }
+
+            // Find the user associated with the reset token
+            UserAccount user = userService.findByConfirmationToken(requestParams.get("token"));
+
+            // Set new password
+            user.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
+
+            // Set user to enabled
+            user.setEnabled(true);
+
+            // Save user
+            userService.saveUser(user);
+
+            modelAndView.addObject("successMessage", "Your password has been set! You can close this windows.");
+        }else{
             bindingResult.reject("password");
-
-            redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
+            redir.addFlashAttribute("errorMessage", "Both passwords must be identical");
 
             modelAndView.setViewName("redirect:confirm?token=" + requestParams.get("token"));
             log.trace(requestParams.get("token"));
             return modelAndView;
         }
 
-        // Find the user associated with the reset token
-        UserAccount user = userService.findByConfirmationToken(requestParams.get("token"));
-
-        // Set new password
-        user.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
-
-        // Set user to enabled
-        user.setEnabled(true);
-
-        // Save user
-        userService.saveUser(user);
-
-        modelAndView.addObject("successMessage", "Your password has been set! You can close this windows.");
         return modelAndView;
     }
 }
