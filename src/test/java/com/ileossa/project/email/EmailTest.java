@@ -4,8 +4,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import com.ileossa.project.email.config.EmailConfig;
-import com.ileossa.project.mail.EmailService;
-import com.ileossa.project.mail.impl.EmailServiceImpl;
+import com.ileossa.project.mail.impl.EmailMethodesImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,14 +28,14 @@ import static org.junit.Assert.assertTrue;
  */
 @ContextConfiguration(classes = EmailConfig.class)
 @SpringBootTest
-@Import(EmailServiceImpl.class)
+@Import(EmailMethodesImpl.class)
 @RunWith(SpringRunner.class)
 public class EmailTest {
 
     @Resource
     private JavaMailSenderImpl emailSender;
     @Autowired
-    private EmailServiceImpl emailService;
+    private EmailMethodesImpl emailService;
 
 
     private GreenMail testSmtp;

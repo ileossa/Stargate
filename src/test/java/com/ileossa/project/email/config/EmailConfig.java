@@ -1,18 +1,15 @@
 package com.ileossa.project.email.config;
 
+import com.ileossa.project.mail.EmailMethodes;
 import com.ileossa.project.mail.EmailService;
-import com.ileossa.project.mail.impl.EmailServiceImpl;
+import com.ileossa.project.mail.impl.EmailMethodesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.ActiveProfiles;
-
-import javax.annotation.Resource;
-import java.util.Properties;
 
 /**
  * Created by ileossa on 02/08/2017.
@@ -53,9 +50,17 @@ public class EmailConfig {
     private JavaMailSenderImpl javaMailSender;
 
     @Bean
-    public EmailServiceImpl emailService(){
-        return new EmailServiceImpl(javaMailSender);
+    public EmailMethodes emailMethodes(){
+        return new EmailMethodesImpl(javaMailSender, emailService );
     }
+
+    @Bean
+    public EmailService emailService(){
+        return new EmailService(javaMailSender);
+    }
+
+    @Autowired
+    private EmailService emailService;
 
 
 }
