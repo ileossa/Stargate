@@ -29,11 +29,6 @@ public class DefaultController {
         return "/user";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "/login";
-    }
-
     @GetMapping("/logout")
     public String logout(){
         return "/logout";
