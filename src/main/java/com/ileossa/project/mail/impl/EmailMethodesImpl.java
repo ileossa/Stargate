@@ -5,6 +5,7 @@ import com.ileossa.project.mail.EmailMethodes;
 import com.ileossa.project.mail.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,8 +26,11 @@ public class EmailMethodesImpl implements EmailMethodes {
     public JavaMailSender emailSender;
     private EmailService emailService;
 
+    @Value("${server.port}")
+    private String serverPort;
+
     @Autowired
-    public EmailMethodesImpl(JavaMailSender emailSender, EmailService emailService) {
+    public EmailMethodesImpl(@Qualifier("mailSender") JavaMailSender emailSender, EmailService emailService) {
         this.emailSender = emailSender;
         this.emailService = emailService;
     }
@@ -59,7 +63,7 @@ public class EmailMethodesImpl implements EmailMethodes {
         String subject = "Registration Confirmation";
         String appUrl = request.getScheme() + "://" + request.getServerName();
         String message = "To confirm your e-mail address, please click the link below:\n"
-                + appUrl + ":8080/confirm?token=" + user.getConfirmationToken();
+                + appUrl + ":" + serverPort + "/confirm?token=" + user.getConfirmationToken();
         SimpleMailMessage registrationEmail = getSimpleMailMessage(user, subject, message);
         emailService.sendEmail(registrationEmail);
     }
@@ -70,7 +74,7 @@ public class EmailMethodesImpl implements EmailMethodes {
         String subject = "Reset Password";
         String appUrl = request.getScheme() + "://" + request.getServerName();
         String message = "Reset your password, please click the link below:\n"
-                + appUrl + ":8080/confirm?token=" + user.getConfirmationToken();
+                + appUrl + ":" + serverPort + "/confirm?token=" + user.getConfirmationToken();
         SimpleMailMessage registrationEmail = getSimpleMailMessage(user, subject, message);
         emailService.sendEmail(registrationEmail);
     }
