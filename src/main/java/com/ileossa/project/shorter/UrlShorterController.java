@@ -2,23 +2,28 @@ package com.ileossa.project.shorter;
 
 import com.ileossa.project.exception.UrlShortException;
 import com.ileossa.project.prism.PrismService;
+import com.ileossa.project.uploadFiles.service.FileService;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 
 /**
@@ -30,15 +35,17 @@ public class UrlShorterController {
 
     private UrlShorterService urlShorterService;
     private PrismService prismService;
+    private FileService fileService;
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
 
     @Autowired
-    public UrlShorterController(UrlShorterServiceImpl urlShorterService, PrismService prismService) {
+    public UrlShorterController(UrlShorterServiceImpl urlShorterService, PrismService prismService, FileService fileService) {
         this.urlShorterService = urlShorterService;
         this.prismService = prismService;
+        this.fileService = fileService;
     }
 
     @PostMapping("/share")
@@ -69,15 +76,26 @@ public class UrlShorterController {
     }
 
 
-    @GetMapping("/share/{shortUrl}")
-    public String redirectOriginalUrl(@PathVariable String shortUrl, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/share/{shortUrl}", method = GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] redirectOriginalUrl(@PathVariable String shortUrl, HttpServletRequest request, HttpServletResponse response) {
+
         String urlOriginal = urlShorterService.getOriginalUrl(shortUrl);
+        String relativePath = fileService.findFile(urlOriginal).getClasspath();
+        // register acitivity
         prismService.logAccess(request);
-        BufferedImage res = urlShorterService.watermark(urlOriginal);
-        ServletOutputStream strem = response.getOutputStream();
-        ImageIO.write(res, "jpg", strem);
-        strem.flush();
-        strem.close();
-        return "redirect:" + urlOriginal;
+        try {
+            BufferedImage img = urlShorterService.watermark(urlOriginal);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(img, FilenameUtils.getExtension(urlOriginal), bos);
+            return bos.toByteArray();
+        } catch (FileNotFoundException e) {
+            logger.error( e.getLocalizedMessage() + " Fail loading file, not found from url shorter: " + shortUrl);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage() + " Fail loading file, not found from url shorter: " + shortUrl);
+        } catch (IllegalArgumentException e){
+            logger.error(e.getLocalizedMessage() + " Fail loading file, not found from url shorter: " + shortUrl);
+        }
+       return "Error loading, file not found.".getBytes();
     }
 }
