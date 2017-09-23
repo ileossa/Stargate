@@ -21,7 +21,7 @@ public class File {
 
     private String classpath;
 
-    public File() {
+    protected File() {
     }
 
     public File(String name, String tag, String classpath) {
