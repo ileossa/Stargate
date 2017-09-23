@@ -42,11 +42,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity httpSecurity) throws Exception{
 
         httpSecurity
-                .csrf()
-                .and()
+                .csrf().disable()
                 .authorizeRequests()
-//                    .antMatchers("/**").permitAll();
-                    .antMatchers("/", "index", "/register", "/confirm", "/reset", "/resources/**" ,"/error/**").permitAll()
+                    .antMatchers("/", "index", "/register", "/confirm", "/reset", "/resources/**", "/home/**", "/admin/**", "/error/**").permitAll()
                     .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                     .antMatchers("/user/**").hasAnyRole("Role_USER")
                     .anyRequest().authenticated()
@@ -75,10 +73,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-//        authenticationManagerBuilder.inMemoryAuthentication()
-//                .withUser("user").password("password").roles("USER")
-//                .and()
-//                .withUser("admin").password("password").roles("ADMIN");
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
