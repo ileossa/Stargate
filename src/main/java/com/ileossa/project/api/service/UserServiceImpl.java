@@ -1,9 +1,7 @@
 package com.ileossa.project.api.service;
 
 import com.ileossa.project.api.dao.UserAccount;
-import com.ileossa.project.api.dao.Role;
 import com.ileossa.project.api.dto.*;
-import com.ileossa.project.api.repository.UserRolesRepository;
 import com.ileossa.project.exception.UserNotExist;
 import com.ileossa.project.api.repository.UserRepository;
 import com.ileossa.project.mail.EmailMethodes;
@@ -11,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -24,20 +19,17 @@ public class UserServiceImpl implements UserService{
 
 
     private final UserRepository userRepository;
-    private UserRolesRepository userRolesRepository;
     private EmailMethodes emailMethodes;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRolesRepository userRolesRepository, EmailMethodes emailMethodes) {
+    public UserServiceImpl(UserRepository userRepository, EmailMethodes emailMethodes) {
         this.userRepository = userRepository;
-        this.userRolesRepository = userRolesRepository;
         this.emailMethodes = emailMethodes;
     }
 
 
     @Override
     public UserAccount saveUser(UserAccount userAccount){
-        userAccount.setRoles(new HashSet<Role>((Set<? extends Role>) userRolesRepository.findByName("ROLE_USER")));
         UserAccount user = userRepository.save(userAccount);
         return user;
     }
