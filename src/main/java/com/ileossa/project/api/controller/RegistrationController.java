@@ -1,5 +1,6 @@
 package com.ileossa.project.api.controller;
 
+import com.ileossa.project.api.dao.Roles;
 import com.ileossa.project.api.dao.UserAccount;
 import com.ileossa.project.api.service.UserService;
 import com.ileossa.project.exception.UserNotExist;
@@ -76,6 +77,8 @@ public class RegistrationController {
 
             // Generate random 36-character string token for confirmation link
             user.setConfirmationToken(UUID.randomUUID().toString());
+
+            user.setRoles(String.valueOf(Roles.USER));
 
             userService.saveUser(user);
 
