@@ -34,10 +34,10 @@ public class UserAccount {
     @NotEmpty(message = "Please provide your last name")
     private String lastName;
 
-    @Column(name = "roles")
-    @ManyToMany
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Column(name = "role")
+    //@ManyToMany
+    //@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private String roles;
 
     @Column(name = "enabled")
     private boolean enabled;
@@ -48,7 +48,7 @@ public class UserAccount {
     protected UserAccount() {
     }
 
-    public UserAccount(String email, String password, String firstName, String lastName, Set<Role> roles, boolean enabled, String confirmationToken) {
+    public UserAccount(String email, String password, String firstName, String lastName, String roles, boolean enabled, String confirmationToken) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -114,11 +114,11 @@ public class UserAccount {
         this.confirmationToken = confirmationToken;
     }
 
-    public Set<Role> getRoles() {
+    public String getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(String roles) {
         this.roles = roles;
     }
 }
