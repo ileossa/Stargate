@@ -138,7 +138,7 @@ spring:
     show-sql: false
     database: POSTGRESQL
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     generate-ddl: true
   tomcat:
     max-wait: 10000
