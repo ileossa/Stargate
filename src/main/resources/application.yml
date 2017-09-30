@@ -32,7 +32,7 @@ logging:
         web: error
         hibernate: error
 
-clasifier.modelPB: C:\\Users\\ileossa\\Desktop\\inception5h
+clasifier.modelPB: /classifier/
 watermark.text: BABAR service
 
 # JPA  - USE this to generate table
@@ -66,8 +66,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: vincnet.iam@gmail.com
-    password: jourbon123
+    username: EMAIL
+    password: PASSWORD
     properties:
       mail:
         smtp:
@@ -115,3 +115,51 @@ server:
     driver-class-name: org.h2.Driver
 
 
+
+---
+#---------------------------------------------------
+#            PRODUCTION  MODE
+#---------------------------------------------------
+spring:
+  profiles: prod
+  datasource:
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASS}
+    url: ${DATABASE_URL}
+    maxActive: 10
+    maxIdle: 5
+    min-idle: 2
+    initialSize: 5
+    removeAbandoned: true
+    platform: d6eoh07c8lsg6r
+    max-wait: 10000
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+  tomcat:
+    max-wait: 10000
+    max-active: 10
+  jmx:
+    enabled: true
+server:
+  port: 0
+
+# Mailing
+# Mailing (download fakeSMTP, and run with java -jar fakeSMTP.jar )
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+  thymeleaf:
+      cache: false
+      mode: HTML5
