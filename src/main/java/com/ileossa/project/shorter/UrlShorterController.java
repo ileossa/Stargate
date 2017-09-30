@@ -50,7 +50,8 @@ public class UrlShorterController {
 
     @PostMapping("/share")
     @ResponseBody
-    public String getShorterUrl(@RequestBody String originalUrl) throws UrlShortException {
+    public String getShorterUrl(@RequestBody String originalUrl, HttpServletRequest request) throws UrlShortException {
+        String appUrl = request.getScheme() + "://" + request.getServerName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         // 1728000 == 20 days
         long instantPlus20Days = timestamp.toInstant().getEpochSecond() + 1728000;
@@ -72,7 +73,7 @@ public class UrlShorterController {
         urlShorterDao.setTimeOfValidity(instantPlus20Days);
         UrlShorterDao object = urlShorterService.save(urlShorterDao);
 
-        return "http://localhost:8080/share/" + object.getShortUrl();
+        return appUrl + "/share/" + object.getShortUrl();
     }
 
 
