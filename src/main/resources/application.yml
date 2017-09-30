@@ -17,13 +17,13 @@ spring:
     name: Licorne
   http:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 application:
   version: 1.0
 server:
-  port: 8080
   contextPath: /
+  port: 8080
 
 logging:
   level:
@@ -37,6 +37,8 @@ watermark.text: BABAR service
 
 # JPA  - USE this to generate table
 spring.jpa.generate-ddl: true
+
+
 
 
 ---
@@ -64,8 +66,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: EMAIL
-    password: PASSWORD
+    username: vincnet.iam@gmail.com
+    password: jourbon123
     properties:
       mail:
         smtp:
