@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.tensorflow.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
@@ -39,12 +40,14 @@ public class LabelImage {
             printUsage(System.err);
             System.exit(1);
         }
-        String modelDir = args[0];
+        String modelDir = this.getClass().getResource(args[0]).getPath();
         String imageFile = args[1];
 
-        byte[] graphDef = readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
-        List<String> labels =
-                readAllLinesOrExit(Paths.get(modelDir, "imagenet_comp_graph_label_strings.txt"));
+        byte[] graphDef = new byte[0];
+
+        graphDef = readAllBytesOrExit(Paths.get(new File(modelDir).getAbsolutePath(), "tensorflow_inception_graph.pb"));
+        List<String> labels = readAllLinesOrExit(Paths.get(new File(modelDir).getAbsolutePath(), "imagenet_comp_graph_label_strings.txt"));
+
         byte[] imageBytes = readAllBytesOrExit(Paths.get(imageFile));
 
         try (Tensor image = constructAndExecuteGraphToNormalizeImage(imageBytes)) {
