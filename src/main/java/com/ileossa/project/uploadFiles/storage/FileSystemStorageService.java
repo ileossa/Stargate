@@ -51,7 +51,7 @@ public class FileSystemStorageService implements StorageService {
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);
 
-            // save jpa
+            // save jpa && classifier image
             File fileStore = fileService.newFileObject(file, this.random, this.rootLocation.resolve(filename).toString());
             fileService.save(fileStore);
         }
