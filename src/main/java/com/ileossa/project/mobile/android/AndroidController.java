@@ -44,7 +44,6 @@ public class AndroidController {
     @RequestMapping(value = "/all", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<File> getAllElement(){
-//        return fileService.findAll();
         return  gallerieService.listAll();
     }
 
