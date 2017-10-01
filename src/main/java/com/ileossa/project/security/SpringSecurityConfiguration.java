@@ -46,6 +46,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                     .antMatchers("/", "index", "/register", "/confirm", "/reset", "/resources/**", "/home/**", "/admin/**", "/error/**").permitAll()
                     .antMatchers("/v1/**").permitAll()
+                    .antMatchers("/health").permitAll()
                     .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                     .antMatchers("/user/**").hasAnyRole("Role_USER")
                     .anyRequest().authenticated()
@@ -72,11 +73,13 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
     }
 
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+//        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+//    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
-
-
-
 }
