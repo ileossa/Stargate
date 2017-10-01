@@ -11,27 +11,27 @@ public class DefaultController {
 
     @GetMapping("/")
     public String home1() {
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "/home";
+        return "home";
     }
 
     @GetMapping("/admin")
     public String admin() {
-        return "/admin";
+        return "admin";
     }
 
     @GetMapping("/user")
     public String user() {
-        return "/user";
+        return "user";
     }
 
     @GetMapping("/logout")
     public String logout(){
-        return "/logout";
+        return "logout";
     }
 
 //    @GetMapping("/gallerie")
@@ -41,17 +41,17 @@ public class DefaultController {
 
     @GetMapping("/index")
     public String index(){
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/pannelAdmin")
     public String pannelAdmin(){
-        return "/pannelAdmin";
+        return "pannelAdmin";
     }
 
     @GetMapping("/simpleAdmin")
     public String simpleAdmin(){
-        return "/simpleAdmin";
+        return "simpleAdmin";
     }
 
     @PostMapping("/echo/{string}")
@@ -62,5 +62,5 @@ public class DefaultController {
 
 
     @GetMapping("/uploadForm")
-    public String uploadForm(){return "/uploadForm";}
+    public String uploadForm(){return "uploadForm";}
 }
