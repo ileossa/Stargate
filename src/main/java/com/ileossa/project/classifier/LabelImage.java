@@ -40,13 +40,13 @@ public class LabelImage {
             printUsage(System.err);
             System.exit(1);
         }
-        String modelDir = this.getClass().getResource(args[0]).getPath();
+        String modelDir = this.getClass().getResource(args[0]).getPath().substring(1);
         String imageFile = args[1];
 
         byte[] graphDef = new byte[0];
 
-        graphDef = readAllBytesOrExit(Paths.get(new File(modelDir).getAbsolutePath(), "tensorflow_inception_graph.pb"));
-        List<String> labels = readAllLinesOrExit(Paths.get(new File(modelDir).getAbsolutePath(), "imagenet_comp_graph_label_strings.txt"));
+        graphDef = readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
+        List<String> labels = readAllLinesOrExit(Paths.get(modelDir, "imagenet_comp_graph_label_strings.txt"));
 
         byte[] imageBytes = readAllBytesOrExit(Paths.get(imageFile));
 
