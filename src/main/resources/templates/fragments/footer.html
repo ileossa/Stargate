@@ -1,0 +1,143 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="footer">
+
+    <div class="footer">
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-logo"><a href="#"><img src="../../home/img/logo.png" th:src="@{/home/img/logo.png}" alt="" /></a></div>
+                <span class="copyright">&copy; Knight Theme. All Rights Reserved</span>
+            </div>
+            <!-- this is footer -->
+            <span sec:authorize="isAuthenticated()">
+                | Logged user: <span sec:authentication="name"></span> |
+                Roles: <span sec:authentication="principal.authorities"></span> |
+                <a th:href="@{/logout}">Sign Out</a>
+
+                <form th:action="@{/logout}" method="post">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sing Out"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+            </span>
+
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" th:src="@{/js/tinybox.js}"></script>
+            <script type="text/javascript">
+                function openJS(){alert('loaded')}
+                function closeJS(){alert('closed')}
+            </script>
+
+            <script type="text/javascript">
+                $(document).ready(function(e) {
+                    $('#test').scrollToFixed();
+                    $('.res-nav_click').click(function(){
+                        $('.main-nav').slideToggle();
+                        return false
+
+                    });
+
+                });
+            </script>
+
+            <script  type="text/javascript">
+                wow = new WOW(
+                    {
+                        animateClass: 'animated',
+                        offset:       100
+                    }
+                );
+                wow.init();
+            </script>
+
+
+            <script type="text/javascript">
+                $(window).load(function(){
+
+                    $('.main-nav li a, .servicelink').bind('click',function(event){
+                        var $anchor = $(this);
+
+                        $('html, body').stop().animate({
+                            scrollTop: $($anchor.attr('href')).offset().top - 102
+                        }, 1500,'easeInOutExpo');
+
+                        //if you don't want to use the easing effects:
+                        $('html, body').stop().animate({
+                            scrollTop: $($anchor.attr('href')).offset().top
+                        }, 1000);
+
+                        if( 768 > $(window).width() ){
+                            $('.main-nav').hide();
+                        }
+                        event.preventDefault();
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+
+                $(window).load(function(){
+
+
+                    var $container = $('.portfolioContainer'),
+                        $body = $('body'),
+                        colW = 375,
+                        columns = null;
+
+
+                    $container.isotope({
+                        // disable window resizing
+                        resizable: true,
+                        masonry: {
+                            columnWidth: colW
+                        }
+                    });
+
+                    $(window).smartresize(function(){
+                        // check if columns has changed
+                        var currentColumns = Math.floor( ( $body.width() -30 ) / colW );
+                        if ( currentColumns !== columns ) {
+                            // set new column count
+                            columns = currentColumns;
+                            // apply width to container manually, then trigger relayout
+                            $container.width( columns * colW )
+                                .isotope('reLayout');
+                        }
+
+                    }).smartresize(); // trigger resize to set container width
+                    $('.portfolioFilter a').click(function(){
+                        $('.portfolioFilter .current').removeClass('current');
+                        $(this).addClass('current');
+
+                        var selector = $(this).attr('data-filter');
+                        $container.isotope({
+
+                            filter: selector,
+                        });
+                        return false;
+                    });
+
+                });
+
+            </script>
+        </footer>
+    </div>
+
+
+
+
+
+</div>
+</body>
+</html>
