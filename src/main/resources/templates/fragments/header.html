@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1" />
@@ -46,9 +46,21 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a th:href="@{/}">Home</a></li>
-                    <li class=""><a th:href="@{/registration}">Sign Up</a></li>
                     <li class=""><a th:href="@{/gallerie}">Gallerie</a></li>
-                    <li class=""><a th:href="@{/pannelAdmin}">Pannel admin</a></li>
+                    <li class="" sec:authorize="isAnonymous()">
+                        <a th:href="@{/logout}">Sign Up</a>
+                    </li>
+                    <li class="" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sing Out"/>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
