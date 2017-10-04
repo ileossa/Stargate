@@ -45,7 +45,7 @@ public class UserAccount {
     @Column(name = "confirmation_token")
     private String confirmationToken;
 
-    protected UserAccount() {
+    public UserAccount() {
     }
 
     public UserAccount(String email, String password, String firstName, String lastName, String roles, boolean enabled, String confirmationToken) {

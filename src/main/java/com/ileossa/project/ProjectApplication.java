@@ -21,7 +21,7 @@ public class ProjectApplication {
 	@Bean
 	CommandLineRunner init(StorageService storageService) {
 		return (args) -> {
-			storageService.deleteAll();
+//			storageService.deleteAll();
 			storageService.init();
 		};
 	}
