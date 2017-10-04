@@ -99,9 +99,6 @@ spring:
           smtp:
             auth: true
             starttls.enable: true
-server:
-  port: 8080
-
 # H2 (acces with localhost:port/h2 or localhost:port/h2-console/)
   h2:
     console:
@@ -109,10 +106,11 @@ server:
       path: /h2
 # Datasource( The database URL jdbc:h2:~/test opens the database test in your user home directory)
   datasource:
-    url: jdbc:h2:file:~/test
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
 
 
 
@@ -154,6 +152,50 @@ spring:
           auth: true
           starttls.enable: true
   thymeleaf:
-      cache: false
+      cache: true
       mode: HTML5
 
+
+---
+#---------------------------------------------------
+#            EDISON MODE
+#---------------------------------------------------
+spring:
+  profiles: edison
+  datasource:
+    url: jdbc:postgresql://localhost:5432/babar
+    username: postgres
+    password: root
+    maxActive: 10
+    maxIdle: 5
+    min-idle: 2
+    initialSize: 5
+    removeAbandoned: true
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  tomcat:
+    max-wait: 10000
+    max-active: 10
+  jmx:
+    enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+  thymeleaf:
+      cache: true
+      mode: HTML5
+logging:
+  level: error
+    org.springframework: error
