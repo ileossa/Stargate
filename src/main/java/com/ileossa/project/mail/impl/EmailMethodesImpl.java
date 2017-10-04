@@ -63,7 +63,7 @@ public class EmailMethodesImpl implements EmailMethodes {
         String subject = "Registration Confirmation";
         String appUrl = request.getScheme() + "://" + request.getServerName();
         String message = "To confirm your e-mail address, please click the link below:\n"
-                + appUrl + ":" + serverPort + "/confirm?token=" + user.getConfirmationToken();
+                + appUrl + "/confirm?token=" + user.getConfirmationToken();
         SimpleMailMessage registrationEmail = getSimpleMailMessage(user, subject, message);
         emailService.sendEmail(registrationEmail);
     }
@@ -74,7 +74,7 @@ public class EmailMethodesImpl implements EmailMethodes {
         String subject = "Reset Password";
         String appUrl = request.getScheme() + "://" + request.getServerName();
         String message = "Reset your password, please click the link below:\n"
-                + appUrl + ":" + serverPort + "/confirm?token=" + user.getConfirmationToken();
+                + appUrl + "/confirm?token=" + user.getConfirmationToken();
         SimpleMailMessage registrationEmail = getSimpleMailMessage(user, subject, message);
         emailService.sendEmail(registrationEmail);
     }
