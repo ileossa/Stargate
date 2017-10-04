@@ -2,6 +2,7 @@ package com.ileossa.project.api.controller;
 
 import com.ileossa.project.api.dao.Roles;
 import com.ileossa.project.api.dao.UserAccount;
+import com.ileossa.project.api.service.SecurityService;
 import com.ileossa.project.api.service.UserService;
 import com.ileossa.project.exception.UserNotExist;
 import com.ileossa.project.mail.EmailMethodes;
@@ -34,13 +35,15 @@ public class RegistrationController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserService userService;
     private EmailMethodes emailMethodes;
+    private SecurityService securityService;
 
     @Autowired
     public RegistrationController(BCryptPasswordEncoder bCryptPasswordEncoder,
-                                  UserService userService, @Qualifier("emailMetodes") EmailMethodes emailMethodes) {
+                                  UserService userService, @Qualifier("emailMetodes") EmailMethodes emailMethodes, SecurityService securityService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userService = userService;
         this.emailMethodes = emailMethodes;
+        this.securityService = securityService;
     }
 
     // Return registration form template
@@ -53,9 +56,10 @@ public class RegistrationController {
 
     // Process form input data
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid UserAccount user, BindingResult bindingResult, HttpServletRequest request) throws UserNotExist {
+    public String processRegistrationForm(ModelAndView modelAndView, @Valid UserAccount user, BindingResult bindingResult, HttpServletRequest request) throws UserNotExist {
 
         modelAndView.addObject("user", new UserAccount("", "","","",null, false, ""));
+        String urlWithTokenForRegisterPassword = "login";
 
         // Lookup user in database by e-mail
         UserAccount userExists = userService.findByEmail(user.getEmail());
@@ -82,13 +86,12 @@ public class RegistrationController {
 
             userService.saveUser(user);
 
-            emailMethodes.sendTokenRegistrationNewUser(user, request);
+            urlWithTokenForRegisterPassword = securityService.generateUrlWithTokenForPassword(user, request);
 
-            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
+            modelAndView.addObject("confirmationMessage", urlWithTokenForRegisterPassword);
         }
-        // move user to login form view
-        modelAndView.setViewName("login");
-        return modelAndView;
+        return "redirect:" + urlWithTokenForRegisterPassword;
+//        return modelAndView;
     }
 
     // Process confirmation link
