@@ -8,4 +8,5 @@ public class UserNotExist extends Throwable {
     public UserNotExist(final String s) {
         super(s);
     }
+
 }
