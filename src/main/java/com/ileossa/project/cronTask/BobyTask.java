@@ -28,16 +28,6 @@ public class BobyTask {
         this.urlShorterRepository = urlShorterRepository;
     }
 
-    @Scheduled(initialDelay = 5000, fixedRate = 5000)
-    public void reportCurrentTime() {
-        log.info("The time is now {}", dateFormat.format(new Date()));
-    }
-
-    @Scheduled(cron="*/10 * * * * *")
-    public void bodyTenSeconds(){
-        log.info("Les 10 secondes de BOBY");
-    }
-
 
     @Scheduled(fixedRate = 5000000)
     public void cleanExpiredShortUrl(){
@@ -45,5 +35,6 @@ public class BobyTask {
         // 1728000 == 20 days
         long instantPlus20Days = timestamp.toInstant().getEpochSecond();
         urlShorterRepository.findByTimeOfValidityOrderByTimeOfValidityAsc(instantPlus20Days);
+        log.info("cron cleanExpiredShortUrl executed");
     }
 }
