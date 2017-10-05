@@ -3,12 +3,15 @@ package com.ileossa.project.classifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tensorflow.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +23,11 @@ import java.util.List;
 @Component
 public class LabelImage {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${path.classifier}")
+    private String pathClassifier;
+
+
 
     private void printUsage(PrintStream s) {
         logger.error(
@@ -40,13 +48,15 @@ public class LabelImage {
             printUsage(System.err);
             System.exit(1);
         }
-        String modelDir = this.getClass().getResource(args[0]).getPath().substring(1);
         String imageFile = args[1];
+
+        String URIFilePB = pathClassifier;
+        String URIFileTxt = pathClassifier;
 
         byte[] graphDef = new byte[0];
 
-        graphDef = readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
-        List<String> labels = readAllLinesOrExit(Paths.get(modelDir, "imagenet_comp_graph_label_strings.txt"));
+        graphDef = readAllBytesOrExit(Paths.get(URIFilePB, "tensorflow_inception_graph.pb"));
+        List<String> labels = readAllLinesOrExit(Paths.get(URIFileTxt, "imagenet_comp_graph_label_strings.txt"));
 
         byte[] imageBytes = readAllBytesOrExit(Paths.get(imageFile));
 

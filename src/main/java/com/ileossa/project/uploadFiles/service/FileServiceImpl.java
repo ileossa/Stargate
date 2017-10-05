@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File newFileObject(MultipartFile file, long random, String classpath) {
-        String tag = detectTagInImage(classpath);
+        // TODO Override best tag match by filename
+        String tag = file.getOriginalFilename();
         File fileStore = new File(random + file.getOriginalFilename(), tag, classpath);
         return fileStore;
     }
@@ -69,8 +71,9 @@ public class FileServiceImpl implements FileService {
         String[] args = new String[2];
         args[0] = classpthModelPB;
         args[1] = classpth;
-        String res = labelImage.startUp(args);
-        return res;
+        // TODO don't activate on intel edison
+//        String res = labelImage.startUp(args);
+        return classpth;
     }
 
     @Override
