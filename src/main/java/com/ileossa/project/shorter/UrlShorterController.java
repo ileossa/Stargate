@@ -9,6 +9,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,8 @@ public class UrlShorterController {
     private UrlShorterService urlShorterService;
     private PrismService prismService;
     private FileService fileService;
+    @Value("${server.port}")
+    private String serverPort;
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -73,7 +76,7 @@ public class UrlShorterController {
         urlShorterDao.setTimeOfValidity(instantPlus20Days);
         UrlShorterDao object = urlShorterService.save(urlShorterDao);
 
-        return appUrl + "/share/" + object.getShortUrl();
+        return appUrl + ":" + serverPort + "/share/" + object.getShortUrl();
     }
 
 
