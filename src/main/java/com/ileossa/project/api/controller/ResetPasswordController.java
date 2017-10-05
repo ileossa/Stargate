@@ -1,6 +1,7 @@
 package com.ileossa.project.api.controller;
 
 import com.ileossa.project.api.dao.UserAccount;
+import com.ileossa.project.api.service.SecurityService;
 import com.ileossa.project.api.service.UserService;
 import com.ileossa.project.exception.UserNotExist;
 import org.slf4j.Logger;
@@ -25,10 +26,12 @@ public class ResetPasswordController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private UserService userService;
+    private SecurityService securityService;
 
     @Autowired
-    public ResetPasswordController(UserService userService) {
+    public ResetPasswordController(UserService userService, SecurityService securityService) {
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @RequestMapping(value = "/reset", method = GET)
@@ -38,18 +41,16 @@ public class ResetPasswordController {
     }
 
     @RequestMapping(value = "/reset", method = POST)
-    public ModelAndView processResetPassword(ModelAndView modelAndView, @Valid UserAccount userAccount, BindingResult bindingResult, HttpServletRequest request) throws UserNotExist {
+    public String processResetPassword(ModelAndView modelAndView, @Valid UserAccount userAccount, BindingResult bindingResult, HttpServletRequest request) throws UserNotExist {
         // Lookup user in database by e-mail
         UserAccount userExists = userService.findByEmail(userAccount.getEmail());
 
         log.debug(String.valueOf(userExists));
 
+        String urlWithTokenForRegisterPassword = "/home";
         if(userExists != null){
-            userService.resetPassword(userExists, request);
+            urlWithTokenForRegisterPassword = securityService.generateUrlWithTokenForPassword(userExists, request);
         }
-        // Show all time this message, prevent identifier user register by email
-        modelAndView.addObject("confirmationMessage", "A reset e-mail password has been send to " + userAccount.getEmail());
-        modelAndView.setViewName("resetPassword");
-        return modelAndView;
+        return "redirect:" + urlWithTokenForRegisterPassword;
     }
 }

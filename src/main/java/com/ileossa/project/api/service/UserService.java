@@ -21,5 +21,5 @@ public interface UserService{
 
 //    public void logout();
     public void resendMail(ResendEmailDto resendEmailDto);
-    public void resetPassword(UserAccount userAccount, HttpServletRequest request);
+    public String resetPassword(UserAccount userAccount, HttpServletRequest request);
 }

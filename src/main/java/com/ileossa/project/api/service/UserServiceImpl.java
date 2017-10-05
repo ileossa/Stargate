@@ -70,11 +70,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void resetPassword(UserAccount user, HttpServletRequest request) {
+    public String resetPassword(UserAccount user, HttpServletRequest request) {
+        String token = UUID.randomUUID().toString();
        user.setEnabled(false);
-       user.setConfirmationToken(UUID.randomUUID().toString());
+       user.setConfirmationToken(token);
        saveUser(user);
        emailMethodes.sendTokenResetPasswordUser(user, request);
+       return token;
     }
 
 
