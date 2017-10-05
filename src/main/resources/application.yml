@@ -77,6 +77,9 @@ spring:
     cache: false
     mode: HTML5
 
+path.classifier: C:\Users\ileossa\Desktop\inception5h
+
+
 
 ---
 #---------------------------------------------------
@@ -196,6 +199,5 @@ spring:
   thymeleaf:
       cache: true
       mode: HTML5
-logging:
-  level: error
-    org.springframework: error
+
+logging.level.org.springframework.web: error
